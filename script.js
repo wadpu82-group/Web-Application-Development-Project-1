@@ -175,6 +175,115 @@ const CATEGORIES = [
 
 let activeCategory = 'all';
 let searchQuery = '';
+let priceCap = null;
+let menuUnlocked = false;
+
+const QUICK_PROMPTS = [
+    'Spicy under 50k',
+    'Sweet under 50k',
+    'Mild spicy under 50k',
+    'Cheap options',
+    'Seafood',
+    'Healthy'
+];
+
+// ================= QUICK ASSISTANT =================
+function parsePriceIntent(text){
+    const t = (text || '').toLowerCase();
+
+    const under50kPatterns = [
+        'under 50k',
+        'below 50k',
+        '<=50k',
+        '<= 50k',
+        'dibawah 50 ribu',
+        'di bawah 50 ribu',
+        'murah',
+        'cheap'
+    ];
+
+    const noLimitPatterns = [
+        'bebas harga',
+        'any price',
+        'no limit'
+    ];
+
+    if(noLimitPatterns.some(p => t.includes(p))){
+        priceCap = null;
+        return;
+    }
+
+    if(under50kPatterns.some(p => t.includes(p))){
+        priceCap = 50000;
+    }
+}
+
+function applyPrompt(text){
+    const cleanText = (text || '').trim();
+    if(!cleanText) return;
+
+    parsePriceIntent(cleanText);
+
+    const promptLower = cleanText.toLowerCase();
+    if(promptLower.includes('seafood')) activeCategory = 'seafood';
+    else if(promptLower.includes('healthy')) activeCategory = 'healthy';
+    else if(promptLower.includes('sweet')) activeCategory = 'sweet';
+    else if(promptLower.includes('spicy')) activeCategory = 'spicy';
+
+    renderCategories();
+    filterMenu();
+}
+
+function submitPrompt(){
+    const input = document.getElementById('promptInput');
+    if(!input) return;
+
+    const text = input.value.trim();
+    if(!text){
+        showToast('Please tell us what you want to order first.', 'error');
+        return;
+    }
+
+    if(!menuUnlocked){
+        menuUnlocked = true;
+    }
+
+    applyPrompt(text);
+    lockMenu(false);
+}
+
+function renderQuickPrompts(){
+    const chipsWrap = document.getElementById('quick-prompt-chips');
+    if(!chipsWrap) return;
+
+    chipsWrap.innerHTML = QUICK_PROMPTS.map(prompt => `
+        <button class="prompt-chip" onclick="useQuickPrompt('${prompt.replace(/'/g, "\\'")}')">${prompt}</button>
+    `).join('');
+}
+
+function useQuickPrompt(prompt){
+    const input = document.getElementById('promptInput');
+    if(input) input.value = prompt;
+    submitPrompt();
+}
+
+function lockMenu(lockState){
+    const lockLayer = document.getElementById('menu-lock');
+    const menu = document.getElementById('menu-container');
+    if(lockLayer){
+        lockLayer.classList.toggle('active', lockState);
+    }
+    if(menu){
+        menu.style.visibility = lockState ? 'hidden' : 'visible';
+    }
+
+    const msg = document.getElementById('prompt-required-msg');
+    if(msg){
+        msg.innerText = lockState
+            ? 'Please tell us what you want to order first.'
+            : (priceCap ? 'Price cap active: ≤ Rp 50.000' : 'Assistant ready. You can browse freely.');
+    }
+}
 
 // ================= RENDER CATEGORY BUTTONS =================
 function renderCategories(){
@@ -200,6 +309,10 @@ function filterByCategory(category){
 
 // ================= FILTER MENU =================
 function filterMenu(){
+    if(!menuUnlocked){
+        return;
+    }
+
     let filtered = [...MENU];
 
     if(activeCategory !== 'all'){
@@ -212,6 +325,10 @@ function filterMenu(){
         filtered = filtered.filter(item =>
             item.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
+    }
+
+    if(priceCap !== null){
+        filtered = filtered.filter(item => item.price <= priceCap);
     }
 
     renderMenu(filtered.slice(0, 40));
@@ -833,7 +950,8 @@ setInterval(autoRestock, 60000);
 function init(){
     loadCart();
     renderCategories();
-    filterMenu();
+    renderQuickPrompts();
+    lockMenu(true);
 }
 
 // Run init when DOM is ready
