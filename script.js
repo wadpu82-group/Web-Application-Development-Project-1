@@ -70,33 +70,33 @@ const MENU = [
 { id:51, name:"Thai Tea", price:18000, img:"🧋", cat:["drink"], taste:"sweet" },
 { id:52, name:"Iced Lemon Tea", price:15000, img:"🍋", cat:["drink"], taste:"medium" },
 { id:53, name:"Mango Smoothie", price:25000, img:"🥭", cat:["drink"], taste:"sweet" },
-{ id:54, name:"Strawberry Milkshake", price:27000, img:"🍓", cat:["drink"], taste:"sweet" },
-{ id:55, name:"Durian Ice", price:25000, img:"🍧", cat:["drink"], taste:"sweet" },
-{ id:56, name:"Avocado Ice", price:20000, img:"🍧", cat:["drink"], taste:"sweet" },
-{ id:57, name:"Es Teler", price:18000, img:"🍧", cat:["drink"], taste:"sweet" },
+{ id:54, name:"Avocado Coffee", price:28000, img:"🥑", cat:["drink"], taste:"medium" },
+{ id:55, name:"Mineral Water", price:7000, img:"💧", cat:["drink"], taste:"medium" },
 
 /* ================= HEALTHY ================= */
-{ id:58, name:"Caesar Salad", price:30000, img:"🥗", cat:["healthy"], taste:"medium" },
-{ id:59, name:"Greek Salad", price:28000, img:"🥗", cat:["healthy"], taste:"medium" },
-{ id:60, name:"Oatmeal Fruit", price:20000, img:"🥣", cat:["healthy"], taste:"sweet" },
+{ id:56, name:"Greek Salad", price:35000, img:"🥗", cat:["healthy"], taste:"medium" },
+{ id:57, name:"Caesar Salad", price:32000, img:"🥗", cat:["healthy"], taste:"medium" },
+{ id:58, name:"Fruit Bowl", price:28000, img:"🍉", cat:["healthy"], taste:"sweet" },
+{ id:59, name:"Granola Yogurt", price:30000, img:"🥣", cat:["healthy"], taste:"sweet" },
+{ id:60, name:"Oatmeal Banana", price:25000, img:"🍌", cat:["healthy"], taste:"sweet" },
 
-/* ================= EXTRA ================= */
-{ id:61, name:"Chicken Curry", price:32000, img:"🍛", cat:["rice"], taste:"medium" },
-{ id:62, name:"Beef Rendang", price:35000, img:"🥩", cat:["rice"], taste:"spicy" },
-{ id:63, name:"Fried Tofu", price:12000, img:"🍢", cat:["snack"], taste:"medium" },
-{ id:64, name:"Tempe Goreng", price:10000, img:"🍢", cat:["snack"], taste:"medium" },
-{ id:65, name:"Garlic Bread", price:15000, img:"🍞", cat:["snack"], taste:"medium" },
+/* ================= SEAFOOD ================= */
+{ id:61, name:"Grilled Prawn", price:65000, img:"🦐", cat:["seafood"], taste:"medium" },
+{ id:62, name:"Butter Crab", price:120000, img:"🦀", cat:["seafood"], taste:"medium" },
+{ id:63, name:"Calamari Fried", price:55000, img:"🦑", cat:["seafood"], taste:"medium" },
+{ id:64, name:"Fish and Chips", price:50000, img:"🐟", cat:["seafood"], taste:"medium" },
+{ id:65, name:"Seafood Platter", price:150000, img:"🦞", cat:["seafood"], taste:"spicy" },
 
-/* ================= DRINKS MORE ================= */
-{ id:66, name:"Es Jeruk", price:15000, img:"🍊", cat:["drink"], taste:"sweet" },
-{ id:67, name:"Es Teh Manis", price:10000, img:"🍹", cat:["drink"], taste:"sweet" },
-{ id:68, name:"Kopi Hitam", price:15000, img:"☕", cat:["drink","coffee"], taste:"medium" },
-{ id:69, name:"Matcha Latte", price:28000, img:"🍵", cat:["drink"], taste:"sweet" },
-{ id:70, name:"Brown Sugar Boba", price:25000, img:"🧋", cat:["drink"], taste:"sweet" },
+/* ================= SNACK ================= */
+{ id:66, name:"Onion Rings", price:20000, img:"🧅", cat:["snack"], taste:"medium" },
+{ id:67, name:"Cheese Balls", price:22000, img:"🧀", cat:["snack"], taste:"medium" },
+{ id:68, name:"Chicken Wings", price:30000, img:"🍗", cat:["snack","spicy"], taste:"spicy" },
+{ id:69, name:"Nachos Beef", price:35000, img:"🌮", cat:["snack"], taste:"medium" },
+{ id:70, name:"Spring Roll", price:18000, img:"🥟", cat:["snack"], taste:"medium" },
 
-/* ================= SNACKS ================= */
-{ id:71, name:"Chicken Nuggets", price:25000, img:"🍗", cat:["snack"], taste:"medium" },
-{ id:72, name:"Onion Rings", price:20000, img:"🧅", cat:["snack"], taste:"medium" },
+/* ================= DRINK PREMIUM ================= */
+{ id:71, name:"Matcha Latte", price:32000, img:"🍵", cat:["drink","premium"], taste:"sweet" },
+{ id:72, name:"Caramel Macchiato", price:35000, img:"☕", cat:["drink","premium"], taste:"sweet" },
 { id:73, name:"Mozzarella Sticks", price:30000, img:"🧀", cat:["snack"], taste:"medium" },
 { id:74, name:"Potato Wedges", price:22000, img:"🥔", cat:["snack"], taste:"medium" },
 { id:75, name:"Dimsum Mix", price:28000, img:"🥟", cat:["snack"], taste:"medium" },
@@ -114,6 +114,16 @@ const MENU = [
 let cart = [];
 let orders = [];
 let chats = [];
+
+const SELLER_PROFILE = {
+    id: "KING-SELLER-001",
+    contact: "wa.me/6281234567890",
+    shortVideo: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+};
+
+let checkoutMap = null;
+let checkoutMarker = null;
+let selectedLocation = null;
 
 // ================= LOAD LOCAL STORAGE =================
 if(localStorage.getItem("orders")){
@@ -397,12 +407,13 @@ function removeFromCart(index){
     cart.splice(index, 1);
     saveCart();
     updateCart();
-    showToast(`🗑️ ${item.name} dihapus dari keranjang`, 'info');
+    showToast(`🗑️ ${item.name} dihapus dari keranjang`, 'error');
 }
 
 // ================= TOGGLE CART =================
 function toggleCart(){
     document.getElementById("cart-modal").classList.toggle("hidden");
+    updateCart();
 }
 
 // ================= CHECKOUT WITH ADDRESS =================
@@ -432,15 +443,18 @@ function showCheckoutModal(){
                     <textarea id="buyer-address" class="w-full p-3 border rounded-xl" rows="3" placeholder="Masukkan alamat lengkap..."></textarea>
                 </div>
                 
-                <!-- Map Placeholder -->
+                <!-- Map Integration -->
                 <div class="mb-4">
-                    <label class="block text-sm font-medium mb-2">🗺️ Lokasi Pengiriman</label>
-                    <div class="bg-gray-100 rounded-xl h-32 flex items-center justify-center">
-                        <div class="text-center">
-                            <div class="text-3xl">🗺️</div>
-                            <p class="text-sm text-gray-500">Map akan muncul di sini</p>
-                        </div>
-                    </div>
+                    <label class="block text-sm font-medium mb-2">🗺️ Lokasi Pengiriman (klik map untuk pin)</label>
+                    <div id="checkout-map" class="rounded-xl border" style="height:220px;"></div>
+                    <p id="map-coords" class="text-xs text-gray-500 mt-2">Belum ada pin lokasi</p>
+                </div>
+                
+                <!-- Seller Contact / Video -->
+                <div class="mb-4 bg-gray-50 p-3 rounded-xl">
+                    <p class="text-sm"><span class="font-medium">Seller ID:</span> ${SELLER_PROFILE.id}</p>
+                    <p class="text-sm"><span class="font-medium">Seller Contact:</span> <a class="text-blue-600 underline" href="https://${SELLER_PROFILE.contact}" target="_blank" rel="noopener">${SELLER_PROFILE.contact}</a></p>
+                    <p class="text-sm"><span class="font-medium">Short Video:</span> <a class="text-blue-600 underline" href="${SELLER_PROFILE.shortVideo}" target="_blank" rel="noopener">Watch</a></p>
                 </div>
                 
                 <!-- Order Summary -->
@@ -486,6 +500,59 @@ function showCheckoutModal(){
     // Show checkout modal
     document.getElementById("cart-modal").classList.add("hidden");
     document.getElementById("checkout-modal").classList.remove("hidden");
+    setTimeout(initCheckoutMap, 0);
+}
+
+// ================= CHECKOUT MAP =================
+function initCheckoutMap(){
+    if(typeof L === "undefined") return;
+
+    const mapEl = document.getElementById("checkout-map");
+    if(!mapEl) return;
+
+    const defaultLocation = selectedLocation || {lat: -6.200000, lng: 106.816666};
+
+    if(!checkoutMap){
+        checkoutMap = L.map("checkout-map").setView([defaultLocation.lat, defaultLocation.lng], 13);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(checkoutMap);
+
+        checkoutMarker = L.marker([defaultLocation.lat, defaultLocation.lng], {draggable: true}).addTo(checkoutMap);
+        selectedLocation = {lat: defaultLocation.lat, lng: defaultLocation.lng};
+
+        checkoutMap.on("click", (e) => {
+            selectedLocation = {lat: e.latlng.lat, lng: e.latlng.lng};
+            checkoutMarker.setLatLng(e.latlng);
+            updateMapCoordsLabel();
+        });
+
+        checkoutMarker.on("dragend", () => {
+            const pos = checkoutMarker.getLatLng();
+            selectedLocation = {lat: pos.lat, lng: pos.lng};
+            updateMapCoordsLabel();
+        });
+    } else {
+        checkoutMap.invalidateSize();
+        checkoutMap.setView([defaultLocation.lat, defaultLocation.lng], 13);
+        checkoutMarker.setLatLng([defaultLocation.lat, defaultLocation.lng]);
+        selectedLocation = {lat: defaultLocation.lat, lng: defaultLocation.lng};
+    }
+
+    updateMapCoordsLabel();
+}
+
+function updateMapCoordsLabel(){
+    const label = document.getElementById("map-coords");
+    if(!label) return;
+
+    if(!selectedLocation){
+        label.innerText = "Belum ada pin lokasi";
+        return;
+    }
+
+    label.innerText = `Pin: ${selectedLocation.lat.toFixed(5)}, ${selectedLocation.lng.toFixed(5)}`;
 }
 
 // ================= CLOSE CHECKOUT MODAL =================
@@ -523,6 +590,10 @@ function processCheckout(){
         total: finalTotal,
         date: new Date().toISOString(),
         status: "pending",
+        sellerId: SELLER_PROFILE.id,
+        sellerContact: SELLER_PROFILE.contact,
+        sellerVideo: SELLER_PROFILE.shortVideo,
+        location: selectedLocation,
         summary: `${buyerSummary} → ${sellerSummary}`
     };
     
@@ -598,7 +669,11 @@ function renderOrders(){
             
             <!-- Address -->
             <div class="text-xs text-gray-600 mb-2">
-                📍 ${o.address || 'Tidak ada alamat'}
+                📍 ${o.address || 'Tidak ada alamat'} ${o.location ? `(${o.location.lat.toFixed(5)}, ${o.location.lng.toFixed(5)})` : ''}
+            </div>
+
+            <div class="text-xs text-gray-600 mb-2">
+                🏪 ${o.sellerId || SELLER_PROFILE.id} • ☎️ ${o.sellerContact || SELLER_PROFILE.contact} • 🎬 <a class="text-blue-600 underline" href="${o.sellerVideo || SELLER_PROFILE.shortVideo}" target="_blank" rel="noopener">short video</a>
             </div>
             
             <!-- Items with quantity and price -->
