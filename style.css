@@ -1,0 +1,191 @@
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #f8fafc;
+}
+
+/* Message Bubble */
+.message-bubble {
+    max-width: 85%;
+    border-radius: 1rem;
+    animation: pop 0.2s ease-out;
+}
+
+@keyframes pop {
+    from { transform: scale(0.98); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Active Tab */
+.active-tab {
+    background-color: white;
+    color: #f97316;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Toast Animations */
+@keyframes bounce-in {
+    0% { transform: translate(-50%, -20px); opacity: 0; }
+    50% { transform: translate(-50%, 5px); }
+    100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.animate-bounce-in {
+    animation: bounce-in 0.3s ease-out forwards;
+}
+
+.animate-fade-out {
+    animation: fade-out 0.3s ease-out forwards;
+}
+
+/* Category Button */
+.category-btn {
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+}
+.category-btn:hover {
+    transform: scale(1.05);
+}
+.category-btn:active {
+    transform: scale(0.98);
+}
+
+/* Card Hover Enhancement */
+.menu-card {
+    cursor: pointer;
+}
+.menu-card:active {
+    transform: scale(0.98);
+}
+
+/* Button Hover */
+button {
+    transition: all 0.2s ease;
+}
+button:active {
+    transform: scale(0.96);
+}
+
+/* Modal Backdrop */
+#cart-modal > div {
+    animation: modal-pop 0.3s ease-out;
+}
+
+@keyframes modal-pop {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Cart Button Pulse */
+.fixed button:first-child {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    50% { box-shadow: 0 4px 25px rgba(0,0,0,0.4); }
+}
+
+/* Item Remove Animation */
+.remove-item {
+    animation: slide-out 0.3s ease-out forwards;
+}
+
+@keyframes slide-out {
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+/* Loading skeleton shimmer enhancement */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Price Tag */
+.price-tag {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Discount Badge */
+.discount-badge {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    animation: badge-pop 0.3s ease-out;
+}
+
+@keyframes badge-pop {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Cart Empty State */
+.cart-empty {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Search Input Focus */
+#searchInput:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+    border-color: #000;
+}
+
+/* Menu Card Image Container */
+.menu-image-container {
+    overflow: hidden;
+}
+.menu-image-container img {
+    transition: transform 0.4s ease;
+}
+.menu-card:hover .menu-image-container img {
+    transform: scale(1.1);
+}
+
+/* Quantity Controls */
+.qty-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f3f4f6;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.qty-btn:hover {
+    background: #e5e7eb;
+    transform: scale(1.1);
+}
+.qty-btn:active {
+    transform: scale(0.95);
+}
