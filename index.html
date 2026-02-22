@@ -42,6 +42,29 @@ body { background:#f8fafc; }
     0%{background-position:-200% 0;}
     100%{background-position:200% 0;}
 }
+
+
+.prompt-chip {
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+.prompt-chip:hover { background: #f3f4f6; }
+
+.menu-lock-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(248, 250, 252, 0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.menu-lock-overlay.active { display: flex; }
+
 </style>
 </head>
 
@@ -60,13 +83,35 @@ body { background:#f8fafc; }
 <div id="buyer-view" class="max-w-6xl mx-auto p-5">
 <div id="category-container" class="flex gap-2 overflow-x-auto pb-4 mb-4 no-scrollbar"></div>
 
-<div class="mb-6">
+<div class="mb-4">
 <input id="searchInput" type="text" placeholder="Search food..."
 class="w-full p-3 border rounded-xl"
 oninput="searchMenu()">
 </div>
 
+<div id="quick-assistant" class="bg-white rounded-2xl shadow-sm border p-4 mb-6">
+<div class="flex items-center gap-2 mb-2">
+<span>💬</span>
+<h3 class="font-bold">Quick Assistant</h3>
+</div>
+<p id="prompt-required-msg" class="text-sm text-gray-600 mb-3">Please tell us what you want to order first.</p>
+<div id="quick-prompt-chips" class="flex flex-wrap gap-2 mb-3"></div>
+<div class="flex gap-2">
+<input id="promptInput" type="text" placeholder="e.g. Spicy under 50k"
+class="flex-1 p-3 border rounded-xl"
+onkeydown="if(event.key==='Enter'){submitPrompt();}">
+<button onclick="submitPrompt()" class="bg-black text-white px-4 rounded-xl">Send</button>
+</div>
+</div>
+
+<div id="menu-area" class="relative">
+<div id="menu-lock" class="menu-lock-overlay rounded-2xl">
+<div class="bg-white p-4 rounded-xl shadow text-center text-sm">
+Please tell us what you want to order first.
+</div>
+</div>
 <div id="menu-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+</div>
 
 <div class="fixed bottom-6 right-6">
 <button onclick="toggleCart()" class="bg-black text-white px-5 py-3 rounded-full shadow-lg">
